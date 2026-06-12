@@ -15,7 +15,7 @@ import { saveMessage, getMessages } from "./controllers/contactController.js";
 
 //app config
 const app = express()
-const port = 4001
+const PORT = process.env.PORT || 4001;
 
 
 //middleware
@@ -44,8 +44,8 @@ app.get("/",(req,res)=>{
     res.send("API WORKING")
 })
 
-app.listen(port,()=>{
-    console.log(`server run on ${port} port`);
-})
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
 
 // nodemon restart trigger
