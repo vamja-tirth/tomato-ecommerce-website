@@ -1,0 +1,27 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 4%;
+}
+
+.navbar .logo-container {
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.navbar .logo-container p {
+    font-size: 12px;
+    font-weight: 500;
+    color: #495057;
+    margin-top: -5px;
+}
+
+.navbar .logo {
+    width: max(10%, 80px);
+}
+
+.navbar .profile {
+    width: 40px;
+}

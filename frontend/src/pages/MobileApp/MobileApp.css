@@ -1,0 +1,25 @@
+.mobile-app-page {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+    min-height: 60vh;
+}
+
+.mobile-app-intro {
+    text-align: center;
+    max-width: 600px;
+}
+
+.mobile-app-intro h1 {
+    color: #262626;
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+
+.mobile-app-intro p {
+    color: #808080;
+    font-size: 18px;
+    line-height: 1.5;
+}

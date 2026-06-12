@@ -1,0 +1,247 @@
+.list-table-format {
+    display: grid;
+    grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr 1fr;
+    align-items: center;
+    gap: 15px;
+    padding: 12px 15px;
+    border: 1px solid #e2e8f0;
+    border-bottom: none;
+    font-size: 14px;
+    color: #4b5563;
+    transition: background-color 0.2s ease;
+}
+
+.list-table-format:last-child {
+    border-bottom: 1px solid #e2e8f0;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.list-table-format:hover {
+    background-color: #f8fafc;
+}
+
+.list-table-format.title {
+    background-color: #f1f5f9;
+    font-weight: 600;
+    color: #1e293b;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.list-table-format.title:hover {
+    background-color: #f1f5f9;
+}
+
+.list-table-format img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+}
+
+@media (max-width: 600px) {
+    .list-table-format {
+        grid-template-columns: 1fr 3fr 1fr;
+        gap: 15px;
+    }
+
+    .list-table-format.title {
+        display: none;
+    }
+}
+
+.list-action {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.edit-btn {
+    color: #3b82f6;
+    font-weight: 500;
+    padding: 6px 12px;
+    border-radius: 4px;
+    background-color: #eff6ff;
+    transition: all 0.2s ease;
+}
+
+.edit-btn:hover {
+    background-color: #3b82f6;
+    color: white;
+}
+
+.cursor {
+    cursor: pointer;
+}
+
+.list-action .cursor:not(.edit-btn) {
+    color: #ef4444;
+    font-weight: bold;
+    padding: 6px 12px;
+    border-radius: 4px;
+    background-color: #fef2f2;
+    transition: all 0.2s ease;
+}
+
+.list-action .cursor:not(.edit-btn):hover {
+    background-color: #ef4444;
+    color: white;
+}
+
+/* Edit Modal Styles */
+.edit-modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.edit-modal-content {
+    background-color: #ffffff;
+    padding: 30px;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 12px;
+    position: relative;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.edit-modal-content h2 {
+    margin-top: 0;
+    margin-bottom: 25px;
+    color: #1e293b;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.close {
+    color: #94a3b8;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.close:hover {
+    color: #0f172a;
+}
+
+/* Modal Form Styles */
+.edit-modal-content form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.edit-modal-content .flex-col {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.edit-modal-content p {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 500;
+    color: #475569;
+}
+
+.edit-modal-content input,
+.edit-modal-content textarea,
+.edit-modal-content select {
+    padding: 10px 14px;
+    border-radius: 6px;
+    border: 1px solid #cbd5e1;
+    font-size: 14px;
+    color: #334155;
+    background-color: #f8fafc;
+    transition: all 0.2s;
+    outline: none;
+}
+
+.edit-modal-content input:focus,
+.edit-modal-content textarea:focus,
+.edit-modal-content select:focus {
+    border-color: #3b82f6;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.edit-modal-content .add-category-price {
+    display: flex;
+    gap: 20px;
+}
+
+.edit-modal-content .add-category,
+.edit-modal-content .add-price {
+    flex: 1;
+}
+
+.edit-modal-content img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px dashed #cbd5e1;
+    padding: 4px;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.edit-modal-content img:hover {
+    border-color: #3b82f6;
+}
+
+.edit-modal-content .add-btn {
+    margin-top: 10px;
+    background-color: #f97316;
+    /* matching tomato theme */
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.edit-modal-content .add-btn:hover {
+    background-color: #ea580c;
+}

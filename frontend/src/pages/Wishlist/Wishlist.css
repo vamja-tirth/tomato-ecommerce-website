@@ -1,0 +1,30 @@
+.wishlist {
+    margin-top: 50px;
+    min-height: 50vh;
+}
+
+.wishlist h2 {
+    font-size: max(2vw,24px);
+    font-weight: 600;
+    margin-bottom: 30px;
+    color: #262626;
+}
+
+.wishlist-display-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 30px;
+    row-gap: 50px;
+}
+
+.wishlist-empty {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    color: #808080;
+    font-size: 18px;
+    text-align: center;
+}
