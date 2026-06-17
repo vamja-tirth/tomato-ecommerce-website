@@ -11,8 +11,10 @@ import {
   Tooltip,
   ResponsiveContainer
 } from 'recharts';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = ({ url }) => {
+  const navigate = useNavigate();
   const [metrics, setMetrics] = useState({
     totalItems: 0,
     totalOrders: 0,
@@ -21,7 +23,12 @@ const Dashboard = ({ url }) => {
     todayRevenue: 0,
   });
 
-  const [monthlySales, setMonthlySales] = useState([]);
+  const [timeframe, setTimeframe] = useState('Monthly');
+  const [chartDataOptions, setChartDataOptions] = useState({
+    Daily: [],
+    Monthly: [],
+    Yearly: []
+  });
 
   const fetchData = useCallback(async () => {
     try {
@@ -36,10 +43,37 @@ const Dashboard = ({ url }) => {
       let tUsers = 0;
       let tRevenue = 0;
       let todayRev = 0;
-      const salesData = Array(12).fill(0).map((_, i) => ({
+
+      // Initialize chart bins
+      const mData = Array(12).fill(0).map((_, i) => ({
         name: new Date(0, i).toLocaleString('en', { month: 'short' }),
         sales: 0
       }));
+
+      // Calculate Monday of the current week
+      const todayDate = new Date();
+      todayDate.setHours(0, 0, 0, 0);
+      const dayOfWeek = todayDate.getDay();
+      const daysSinceMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+      const mondayDate = new Date(todayDate);
+      mondayDate.setDate(todayDate.getDate() - daysSinceMonday);
+
+      const dData = Array(7).fill(0).map((_, i) => {
+         const d = new Date(mondayDate);
+         d.setDate(mondayDate.getDate() + i);
+         return {
+           name: d.toLocaleString('en', { weekday: 'short' }),
+           dateString: d.toDateString(),
+           sales: 0
+         }
+      });
+
+      const currentYear = new Date().getFullYear();
+      const yData = [
+        { name: (currentYear - 2).toString(), sales: 0, year: currentYear - 2 },
+        { name: (currentYear - 1).toString(), sales: 0, year: currentYear - 1 },
+        { name: currentYear.toString(), sales: 0, year: currentYear }
+      ];
 
       if (foodsRes.data.success) {
         tItems = foodsRes.data.data.length;
@@ -65,8 +99,23 @@ const Dashboard = ({ url }) => {
               todayRev += order.amount;
             }
 
-            const monthIndex = orderDate.getMonth();
-            salesData[monthIndex].sales += order.amount;
+            // Monthly
+            if (orderDate.getFullYear() === currentYear) {
+              mData[orderDate.getMonth()].sales += order.amount;
+            }
+
+            // Daily (last 7 days)
+            const orderDateString = orderDate.toDateString();
+            const dItem = dData.find(d => d.dateString === orderDateString);
+            if (dItem) {
+              dItem.sales += order.amount;
+            }
+
+            // Yearly
+            const yItem = yData.find(y => y.year === orderDate.getFullYear());
+            if (yItem) {
+              yItem.sales += order.amount;
+            }
           }
         });
       }
@@ -79,7 +128,11 @@ const Dashboard = ({ url }) => {
         todayRevenue: todayRev,
       });
 
-      setMonthlySales(salesData);
+      setChartDataOptions({
+        Daily: dData,
+        Monthly: mData,
+        Yearly: yData
+      });
 
     } catch (error) {
       console.error("Error fetching dashboard data:", error);
@@ -94,12 +147,6 @@ const Dashboard = ({ url }) => {
     loadData();
   }, [fetchData]);
 
-  const monthlyTarget = 20000;
-  const currentMonth = new Date().getMonth();
-  const currentMonthRevenue = monthlySales[currentMonth]?.sales || 0;
-  const targetPercentage = Math.min((currentMonthRevenue / monthlyTarget) * 100, 100).toFixed(2);
-
-
   return (
     <div className='dashboard add flex-col'>
       <div className="dashboard-header">
@@ -108,36 +155,33 @@ const Dashboard = ({ url }) => {
       </div>
 
       <div className="dashboard-cards">
-        <div className="card">
+        <div className="card" onClick={() => navigate('/users')}>
           <div className="card-icon users-icon">
             👥
           </div>
           <div className="card-info">
             <p className="card-title">Customers</p>
             <h3>{metrics.totalUsers.toLocaleString()}</h3>
-            <span className="trend up">↑ +2.5%</span>
           </div>
         </div>
 
-        <div className="card">
+        <div className="card" onClick={() => navigate('/Orders')}>
           <div className="card-icon orders-icon">
             📦
           </div>
           <div className="card-info">
             <p className="card-title">Orders</p>
             <h3>{metrics.totalOrders.toLocaleString()}</h3>
-            <span className="trend up">↑ +5.2%</span>
           </div>
         </div>
         
-        <div className="card">
+        <div className="card" onClick={() => navigate('/list')}>
           <div className="card-icon items-icon">
              🍔
           </div>
           <div className="card-info">
             <p className="card-title">Food Items</p>
             <h3>{metrics.totalItems.toLocaleString()}</h3>
-            <span className="trend neutral">- 0.0%</span>
           </div>
         </div>
       </div>
@@ -145,12 +189,20 @@ const Dashboard = ({ url }) => {
       <div className="dashboard-charts">
         <div className="chart-container main-chart">
           <div className="chart-header">
-            <h3>Monthly Sales</h3>
-            <span className="dots">⋮</span>
+            <h3>{timeframe} Sales</h3>
+            <select 
+              value={timeframe} 
+              onChange={(e) => setTimeframe(e.target.value)} 
+              className="timeframe-select"
+            >
+              <option value="Daily">Daily</option>
+              <option value="Monthly">Monthly</option>
+              <option value="Yearly">Yearly</option>
+            </select>
           </div>
           <div className="chart-area">
             <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={monthlySales}>
+              <BarChart data={chartDataOptions[timeframe] || []}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#eee" />
                 <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#666'}} />
                 <YAxis axisLine={false} tickLine={false} tick={{fill: '#666'}} />
@@ -158,53 +210,6 @@ const Dashboard = ({ url }) => {
                 <Bar dataKey="sales" fill="#4a5ce4" radius={[4, 4, 0, 0]} barSize={20} />
               </BarChart>
             </ResponsiveContainer>
-          </div>
-        </div>
-
-        <div className="chart-container target-chart">
-          <div className="chart-header">
-            <h3>Monthly Target</h3>
-            <span className="dots">⋮</span>
-          </div>
-          <p className="target-subtitle">Target you've set for each month</p>
-          
-          <div className="progress-circle">
-            <svg viewBox="0 0 36 36" className="circular-chart blue">
-              <path className="circle-bg"
-                d="M18 2.0845
-                  a 15.9155 15.9155 0 0 1 0 31.831
-                  a 15.9155 15.9155 0 0 1 0 -31.831"
-              />
-              <path className="circle"
-                strokeDasharray={`${targetPercentage}, 100`}
-                d="M18 2.0845
-                  a 15.9155 15.9155 0 0 1 0 31.831
-                  a 15.9155 15.9155 0 0 1 0 -31.831"
-              />
-            </svg>
-            <div className="percentage-text">
-              <h2>{targetPercentage}%</h2>
-              <span>+10%</span>
-            </div>
-          </div>
-
-          <div className="target-info">
-             <p>You earn ₹{metrics.todayRevenue.toLocaleString()} today, it's higher than last month. Keep up your good work!</p>
-          </div>
-
-          <div className="target-stats">
-             <div className="stat-item">
-               <span className="stat-label">Target</span>
-               <span className="stat-value">₹20K ↓</span>
-             </div>
-             <div className="stat-item">
-               <span className="stat-label">Revenue</span>
-               <span className="stat-value">₹{(metrics.totalRevenue/1000).toFixed(1)}K ↑</span>
-             </div>
-             <div className="stat-item">
-               <span className="stat-label">Today</span>
-               <span className="stat-value">₹{(metrics.todayRevenue/1000).toFixed(1)}K ↑</span>
-             </div>
           </div>
         </div>
       </div>

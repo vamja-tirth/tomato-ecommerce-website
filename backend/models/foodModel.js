@@ -9,7 +9,9 @@ const foodSchema = new mongoose.Schema({
     ratings: [
         {
             userId: { type: String, required: true },
-            rating: { type: Number, required: true }
+            rating: { type: Number, required: true },
+            review: { type: String },
+            userName: { type: String }
         }
     ],
     averageRating: { type: Number, default: 0 }

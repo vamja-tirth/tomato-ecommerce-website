@@ -7,8 +7,21 @@
 
 .navbar .logo-container {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
     cursor: pointer;
+}
+
+.navbar .menu-icon {
+    display: none;
+    color: #495057;
+}
+
+@media (max-width: 900px) {
+    .navbar .menu-icon {
+        display: block;
+    }
 }
 
 .navbar .logo-container p {

@@ -48,33 +48,36 @@
     transform: translateY(-2px);
 }
 
-.order-icon-container {
-    background: #fff4f2;
-    width: 70px;
-    height: 70px;
+.order-items-list {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    flex-shrink: 0;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
 }
 
-.order-icon-container img {
-    width: 35px;
-    opacity: 0.8;
+.order-item-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.order-item-row img {
+    width: 50px;
+    height: 50px;
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+    object-fit: cover;
+}
+
+.order-item-row p {
+    font-size: 16px;
+    font-weight: 600;
+    color: #2c2c2c;
 }
 
 .order-details {
     flex: 1;
-    margin: 0 30px;
-}
-
-.order-items {
-    font-size: 16px;
-    font-weight: 600;
-    color: #2c2c2c;
-    margin-bottom: 8px;
-    line-height: 1.4;
+    margin-right: 30px;
 }
 
 .order-meta {

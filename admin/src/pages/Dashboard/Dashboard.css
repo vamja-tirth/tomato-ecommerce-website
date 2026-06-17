@@ -35,6 +35,13 @@
   gap: 15px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.03);
   border: 1px solid rgba(0,0,0,0.05);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
 }
 
 .card-icon {
@@ -106,7 +113,7 @@
 
 .dashboard-charts {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 1fr;
   gap: 20px;
   margin-top: 10px;
 }
@@ -139,6 +146,24 @@
 
 .chart-area {
   margin-top: 10px;
+}
+
+.timeframe-select {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  outline: none;
+  cursor: pointer;
+  background-color: #f9f9f9;
+  font-size: 14px;
+  color: #333;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.timeframe-select:hover {
+  background-color: #f1f1f1;
+  border-color: #ccc;
 }
 
 .target-subtitle {

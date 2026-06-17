@@ -1,9 +1,6 @@
 .contact-list-table {
     margin-top: 20px;
-    background-color: white;
-    border: 1px solid #e2e2e2;
-    border-radius: 8px;
-    overflow: hidden;
+    min-width: 800px;
 }
 
 .contact-list-table-format {
@@ -11,20 +8,34 @@
     grid-template-columns: 1fr 1.5fr 3fr 1fr;
     align-items: center;
     gap: 15px;
-    padding: 15px 20px;
-    border-bottom: 1px solid #eeeeee;
+    padding: 12px 15px;
+    border: 1px solid #e2e8f0;
+    border-bottom: none;
     font-size: 14px;
-    color: #454545;
-}
-
-.contact-list-table-format.title {
-    background-color: #f3f3f3;
-    font-weight: 600;
-    color: #000;
+    color: #4b5563;
+    transition: background-color 0.2s ease;
 }
 
 .contact-list-table-format:last-child {
-    border-bottom: none;
+    border-bottom: 1px solid #e2e8f0;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.contact-list-table-format:hover {
+    background-color: #f8fafc;
+}
+
+.contact-list-table-format.title {
+    background-color: #f1f5f9;
+    font-weight: 600;
+    color: #1e293b;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.contact-list-table-format.title:hover {
+    background-color: #f1f5f9;
 }
 
 .add.flex-col p {
@@ -33,13 +44,8 @@
     color: #262626;
 }
 
-@media (max-width: 900px) {
-    .contact-list-table-format {
-        grid-template-columns: 1fr 1.5fr 1fr;
-        font-size: 12px;
-    }
-    .contact-list-table-format b:nth-child(3),
-    .contact-list-table-format p:nth-child(3) {
-        display: none;
-    }
+.add.flex-col p {
+    font-size: 20px;
+    font-weight: 500;
+    color: #262626;
 }

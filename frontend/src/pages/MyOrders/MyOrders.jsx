@@ -37,18 +37,15 @@ const MyOrders = () => {
                 {data.map((order, index) => {
                     return (
                         <div key={index} className='my-orders-order'>
-                            <div className="order-icon-container">
-                                <img src={assets.parcel_icon} alt="" />
-                            </div>
                             <div className="order-details">
-                                <p className='order-items'>{order.items.map((item, index) => {
-                                    if (index === order.items.length - 1) {
-                                        return item.name + " x " + item.quantity
-                                    }
-                                    else {
-                                        return item.name + " x " + item.quantity + ", "
-                                    }
-                                })}</p>
+                                <div className='order-items-list'>
+                                    {order.items.map((item, index) => (
+                                        <div key={index} className='order-item-row'>
+                                            <img src={url + "/images/" + item.image} alt={item.name} />
+                                            <p>{item.name} x {item.quantity}</p>
+                                        </div>
+                                    ))}
+                                </div>
                                 <div className="order-meta">
                                     <p className='order-amount'>₹{order.amount}.00</p>
                                     <p className='order-count'>Items: {order.items.length}</p>

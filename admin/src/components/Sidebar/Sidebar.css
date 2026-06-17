@@ -29,10 +29,32 @@
 }
 
 
-@media (max-width:900px) {
-    .sidebar-option p{
-        display: none;
-
+@media (max-width: 900px) {
+    .sidebar {
+        position: fixed;
+        left: -100%;
+        top: 65px;
+        z-index: 1000;
+        background-color: #fcfcfc;
+        width: 250px;
+        min-height: calc(100vh - 65px);
+        transition: left 0.3s ease-in-out;
+        border-top: 1px solid #a9a9a9;
     }
-    
+    .sidebar.show {
+        left: 0;
+    }
+    .sidebar-options {
+        padding-top: 30px;
+        padding-left: 20px;
+    }
+    .sidebar-option {
+        width: 90%;
+        border-radius: 4px;
+        justify-content: flex-start;
+        padding: 12px 15px;
+    }
+    .sidebar-option p {
+        display: block; /* ensure text shows when sidebar is opened */
+    }
 }

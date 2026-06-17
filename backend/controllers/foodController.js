@@ -1,5 +1,6 @@
 import { log } from "console";
 import foodModel from "../models/foodModel.js";
+import userModel from "../models/userModel.js";
 import fs from 'fs'
 
 
@@ -87,7 +88,7 @@ const editFood = async (req, res) => {
 
 const rateFood = async (req, res) => {
     try {
-        const { foodId, rating } = req.body;
+        const { foodId, rating, review } = req.body;
         const userId = req.userId; // From authMiddleware
 
         if (!userId) {
@@ -99,6 +100,9 @@ const rateFood = async (req, res) => {
             return res.json({ success: false, message: "Food not found" });
         }
 
+        const user = await userModel.findById(userId);
+        const userName = user ? user.name : "Anonymous";
+
         // Ensure ratings array exists
         if (!food.ratings) {
             food.ratings = [];
@@ -107,15 +111,18 @@ const rateFood = async (req, res) => {
         // Check if user already rated
         const existingRatingIndex = food.ratings.findIndex(r => r.userId === userId);
         if (existingRatingIndex >= 0) {
-            food.ratings[existingRatingIndex].rating = rating;
+            if (rating) food.ratings[existingRatingIndex].rating = rating;
+            if (review !== undefined) food.ratings[existingRatingIndex].review = review;
+            food.ratings[existingRatingIndex].userName = userName;
         } else {
-            food.ratings.push({ userId, rating });
+            food.ratings.push({ userId, rating: rating || 5, review, userName });
         }
 
         // Calculate average rating
-        const totalRatings = food.ratings.length;
+        const ratedItems = food.ratings.filter(r => r.rating);
+        const totalRatings = ratedItems.length;
         if (totalRatings > 0) {
-            const sumRatings = food.ratings.reduce((acc, curr) => acc + curr.rating, 0);
+            const sumRatings = ratedItems.reduce((acc, curr) => acc + curr.rating, 0);
             food.averageRating = sumRatings / totalRatings;
         } else {
             food.averageRating = 0;
@@ -123,7 +130,7 @@ const rateFood = async (req, res) => {
 
         food.markModified('ratings');
         await food.save();
-        res.json({ success: true, message: "Food Rated", averageRating: food.averageRating });
+        res.json({ success: true, message: "Review Submitted", averageRating: food.averageRating });
     } catch (error) {
         console.log(error);
         res.json({ success: false, message: error.message });

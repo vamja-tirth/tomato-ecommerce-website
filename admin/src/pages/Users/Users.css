@@ -29,6 +29,10 @@
     margin-left: 5px;
 }
 
+.users-list {
+    min-width: 800px;
+}
+
 .users-list-format {
     display: grid;
     grid-template-columns: 0.5fr 1.5fr 2fr 1.5fr;
@@ -59,17 +63,4 @@
     font-family: monospace;
     font-size: 12px;
     color: #94a3b8;
-}
-
-@media (max-width: 600px) {
-    .users-list-format {
-        grid-template-columns: 1fr 2fr 1fr;
-        font-size: 12px;
-    }
-    .user-id {
-        display: none;
-    }
-    .users-list-format.title {
-        display: none;
-    }
 }

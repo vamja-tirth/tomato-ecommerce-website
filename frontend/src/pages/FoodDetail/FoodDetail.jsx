@@ -1,13 +1,17 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { StoreContext } from '../../context/StoreContext'
 import { assets } from '../../assets/assets'
+import axios from 'axios'
+import { toast } from 'react-toastify'
 import './FoodDetail.css'
 
 const FoodDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { food_list, cartItems, addToCart, removeFromCart, url, wishlistItems, addToWishlist, removeFromWishlist } = useContext(StoreContext);
+  const { food_list, cartItems, addToCart, removeFromCart, url, wishlistItems, addToWishlist, removeFromWishlist, token, fetchFoodList } = useContext(StoreContext);
+
+  const [hoverRating, setHoverRating] = useState(0);
 
   const foodItem = food_list.find(item => item._id === id);
 
@@ -16,6 +20,26 @@ const FoodDetail = () => {
   }
 
   const inWishlist = wishlistItems && wishlistItems[id];
+
+  const handleRating = async (ratingVal) => {
+      if (!token) {
+          toast.error("Please login to rate food items");
+          return;
+      }
+      try {
+          const response = await axios.post(url + "/api/food/rate", { foodId: id, rating: ratingVal }, { headers: { token } });
+          if (response.data.success) {
+              await fetchFoodList();
+              toast.success("Rating submitted!");
+          } else {
+              toast.error(response.data.message || "Error submitting rating");
+          }
+      } catch (error) {
+          toast.error("Error submitting rating");
+      }
+  }
+
+
 
   return (
     <div className='food-detail-page'>
@@ -37,8 +61,21 @@ const FoodDetail = () => {
         <div className="food-detail-info-section">
           <h1 className="food-detail-title">{foodItem.name}</h1>
           <div className="food-detail-rating">
-            <img src={assets.rating_starts} alt="Rating" />
-            <span>(Customer reviews)</span>
+            <div className="food-item-stars">
+                {[1, 2, 3, 4, 5].map((star) => (
+                    <span 
+                        key={star} 
+                        className={`star-icon ${star <= (hoverRating || Math.round(foodItem.averageRating || 0)) ? 'active' : ''}`}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            handleRating(star);
+                        }}
+                        onMouseEnter={() => setHoverRating(star)}
+                        onMouseLeave={() => setHoverRating(0)}
+                    >&#9733;</span>
+                ))}
+            </div>
+            <span className="rating-value">{foodItem.averageRating ? foodItem.averageRating.toFixed(1) : "0.0"}</span>
           </div>
           <p className="food-detail-price">₹{foodItem.price}</p>
           <p className="food-detail-desc">{foodItem.description}</p>
@@ -58,6 +95,9 @@ const FoodDetail = () => {
           <div className="food-detail-extra-info">
             <p><strong>Category:</strong> {foodItem.category}</p>
           </div>
+          
+
+
         </div>
       </div>
     </div>
