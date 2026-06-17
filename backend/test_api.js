@@ -1,6 +1,6 @@
 async function test() {
     try {
-        const response = await fetch('http://localhost:4001/api/test');
+        const response = await fetch('https://tomato-ecommerce-website.onrender.com/api/test');
         const data = await response.text();
         console.log('GET /api/test:', data);
     } catch (error) {
@@ -8,7 +8,7 @@ async function test() {
     }
 
     try {
-        const response = await fetch('http://localhost:4001/api/contact/save', {
+        const response = await fetch('https://tomato-ecommerce-website.onrender.com/api/contact/save', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

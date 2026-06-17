@@ -13,7 +13,7 @@ import { ToastContainer } from 'react-toastify';
 
 const App = () => {
 
-  const url = "http://localhost:4001";
+  const url = "https://tomato-ecommerce-website.onrender.com";
   const [showSidebar, setShowSidebar] = useState(false);
 
   return (

@@ -14,4 +14,4 @@ export const assets ={
     parcel_icon
 }
 
-export const url = 'http://localhost:4001'
+export const url = 'https://tomato-ecommerce-website.onrender.com'
